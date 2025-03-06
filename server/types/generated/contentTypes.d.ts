@@ -362,196 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiHistoryPackageHistoryPackage extends Schema.CollectionType {
-  collectionName: 'history_packages';
-  info: {
-    singularName: 'history-package';
-    pluralName: 'history-packages';
-    displayName: 'history-package';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    users_permissions_user: Attribute.Relation<
-      'api::history-package.history-package',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    packages: Attribute.Relation<
-      'api::history-package.history-package',
-      'manyToMany',
-      'api::package.package'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::history-package.history-package',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::history-package.history-package',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPackagePackage extends Schema.CollectionType {
-  collectionName: 'packages';
-  info: {
-    singularName: 'package';
-    pluralName: 'packages';
-    displayName: 'Package';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    title: Attribute.String;
-    price: Attribute.Decimal;
-    duration: Attribute.String;
-    capacity: Attribute.Integer;
-    capacity_max: Attribute.Integer;
-    description: Attribute.Blocks;
-    images: Attribute.Media;
-    users_permissions_users: Attribute.Relation<
-      'api::package.package',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    payments: Attribute.Relation<
-      'api::package.package',
-      'oneToMany',
-      'api::payment.payment'
-    >;
-    reviews: Attribute.Relation<
-      'api::package.package',
-      'oneToMany',
-      'api::review.review'
-    >;
-    isAvailable: Attribute.Enumeration<['Available', 'Not Available']>;
-    specials: Attribute.JSON;
-    timeOfTour: Attribute.JSON;
-    startDate: Attribute.Date;
-    history_packages: Attribute.Relation<
-      'api::package.package',
-      'manyToMany',
-      'api::history-package.history-package'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::package.package',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::package.package',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPaymentPayment extends Schema.CollectionType {
-  collectionName: 'payments';
-  info: {
-    singularName: 'payment';
-    pluralName: 'payments';
-    displayName: 'Payment';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    users_permissions_user: Attribute.Relation<
-      'api::payment.payment',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    package: Attribute.Relation<
-      'api::payment.payment',
-      'manyToOne',
-      'api::package.package'
-    >;
-    amount: Attribute.Decimal;
-    payment_slip: Attribute.Media;
-    payment_status: Attribute.Enumeration<['Pending', 'Approved', 'Rejected']>;
-    payment_date: Attribute.DateTime;
-    notes: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::payment.payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::payment.payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiReviewReview extends Schema.CollectionType {
-  collectionName: 'reviews';
-  info: {
-    singularName: 'review';
-    pluralName: 'reviews';
-    displayName: 'Review';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    users_permissions_user: Attribute.Relation<
-      'api::review.review',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    package: Attribute.Relation<
-      'api::review.review',
-      'manyToOne',
-      'api::package.package'
-    >;
-    rating: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<
-        {
-          min: 1;
-          max: 5;
-        },
-        number
-      >;
-    comment: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::review.review',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::review.review',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -995,6 +805,196 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiHistoryPackageHistoryPackage extends Schema.CollectionType {
+  collectionName: 'history_packages';
+  info: {
+    singularName: 'history-package';
+    pluralName: 'history-packages';
+    displayName: 'history-package';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::history-package.history-package',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    packages: Attribute.Relation<
+      'api::history-package.history-package',
+      'manyToMany',
+      'api::package.package'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::history-package.history-package',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::history-package.history-package',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPackagePackage extends Schema.CollectionType {
+  collectionName: 'packages';
+  info: {
+    singularName: 'package';
+    pluralName: 'packages';
+    displayName: 'Package';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Attribute.String;
+    price: Attribute.Decimal;
+    duration: Attribute.String;
+    capacity: Attribute.Integer;
+    capacity_max: Attribute.Integer;
+    description: Attribute.Blocks;
+    images: Attribute.Media;
+    users_permissions_users: Attribute.Relation<
+      'api::package.package',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    payments: Attribute.Relation<
+      'api::package.package',
+      'oneToMany',
+      'api::payment.payment'
+    >;
+    reviews: Attribute.Relation<
+      'api::package.package',
+      'oneToMany',
+      'api::review.review'
+    >;
+    isAvailable: Attribute.Enumeration<['Available', 'Not Available']>;
+    specials: Attribute.JSON;
+    timeOfTour: Attribute.JSON;
+    startDate: Attribute.Date;
+    history_packages: Attribute.Relation<
+      'api::package.package',
+      'manyToMany',
+      'api::history-package.history-package'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::package.package',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::package.package',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPaymentPayment extends Schema.CollectionType {
+  collectionName: 'payments';
+  info: {
+    singularName: 'payment';
+    pluralName: 'payments';
+    displayName: 'Payment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::payment.payment',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    package: Attribute.Relation<
+      'api::payment.payment',
+      'manyToOne',
+      'api::package.package'
+    >;
+    amount: Attribute.Decimal;
+    payment_slip: Attribute.Media;
+    payment_status: Attribute.Enumeration<['Pending', 'Approved', 'Rejected']>;
+    payment_date: Attribute.DateTime;
+    notes: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::payment.payment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReviewReview extends Schema.CollectionType {
+  collectionName: 'reviews';
+  info: {
+    singularName: 'review';
+    pluralName: 'reviews';
+    displayName: 'Review';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::review.review',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    package: Attribute.Relation<
+      'api::review.review',
+      'manyToOne',
+      'api::package.package'
+    >;
+    rating: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<
+        {
+          min: 1;
+          max: 5;
+        },
+        number
+      >;
+    comment: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -1005,10 +1005,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::history-package.history-package': ApiHistoryPackageHistoryPackage;
-      'api::package.package': ApiPackagePackage;
-      'api::payment.payment': ApiPaymentPayment;
-      'api::review.review': ApiReviewReview;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -1017,6 +1013,10 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::history-package.history-package': ApiHistoryPackageHistoryPackage;
+      'api::package.package': ApiPackagePackage;
+      'api::payment.payment': ApiPaymentPayment;
+      'api::review.review': ApiReviewReview;
     }
   }
 }

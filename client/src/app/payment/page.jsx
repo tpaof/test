@@ -5,12 +5,15 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Swal from 'sweetalert2';
+import { Suspense } from 'react';
+import config from 'config';
 
-export default function Payment() {
+// Separate the content that uses useSearchParams into its own component
+function PaymentContent() {
     const [formData, setFormData] = useState({
         name: '',
         lastname: '',
-        email: '', // แก้ไขจาก emaill เป็น email
+        email: '',
         phone: '',
         price: '',
         slip: null,
@@ -32,7 +35,7 @@ export default function Payment() {
                 throw new Error("No JWT token found");
             }
 
-            const response = await fetch(`http://localhost:1337/api/history-packages/${id}`, {
+            const response = await fetch(`${config.serverUrlPrefix}/api/history-packages/${id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -92,13 +95,12 @@ export default function Payment() {
                 throw new Error("Booking ID is missing");
             }
 
-            // อัปโหลดสลิป (ถ้ามี)
             let slipId = null;
             if (formData.slip) {
                 const slipData = new FormData();
                 slipData.append('files', formData.slip);
 
-                const uploadResponse = await fetch('http://localhost:1337/api/upload', {
+                const uploadResponse = await fetch(`${config.serverUrlPrefix}/api/upload`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -112,23 +114,22 @@ export default function Payment() {
                 }
 
                 const uploadResult = await uploadResponse.json();
-                slipId = uploadResult[0].id; // รับ ID ของไฟล์ที่อัปโหลด
+                slipId = uploadResult[0].id;
             }
 
-            // อัปเดทข้อมูลการจอง
             const paymentData = {
                 data: {
                     name: formData.name,
                     lastname: formData.lastname,
-                    email: formData.email, // แก้ไขจาก emaill เป็น email
+                    email: formData.email,
                     phone: formData.phone,
                     price: parseInt(formData.price, 10),
-                    slip: slipId ? { id: slipId } : null, // เชื่อมโยงสลิป (ถ้ามี)
-                    publishedAt: null // ลบ publishedAt เพื่อเปลี่ยนสถานะ
+                    slip: slipId ? { id: slipId } : null,
+                    publishedAt: null
                 }
             };
 
-            const updateResponse = await fetch(`http://localhost:1337/api/history-packages/${bookingId}`, {
+            const updateResponse = await fetch(`${config.serverUrlPrefix}/api/history-packages/${bookingId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -150,7 +151,6 @@ export default function Payment() {
             }).then(() => {
                 router.push('/history');
             });
-
         } catch (error) {
             console.error('Error submitting payment:', error);
             Swal.fire({
@@ -166,7 +166,6 @@ export default function Payment() {
         <div className="container mx-auto px-8 py-8 flex flex-col items-center min-h-screen">
             <div className="bg-white shadow-lg rounded-lg p-6 border w-full max-w-4xl">
                 <h1 className="text-4xl font-bold mb-6 text-white bg-[#24685F] p-4 rounded-t-lg text-center">PAYMENT</h1>
-                
                 <div className="flex flex-col md:flex-row items-center justify-between p-6">
                     <form onSubmit={handleSubmit} className="bg-gray-100 shadow-md rounded-lg p-6 w-full md:w-1/2">
                         <div className="flex gap-4 mb-4">
@@ -197,7 +196,7 @@ export default function Payment() {
                             <label className="block text-gray-700 mb-1">อีเมล</label>
                             <input
                                 type="email"
-                                name="email" // แก้ไขจาก emaill เป็น email
+                                name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="border rounded w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#24685F]"
@@ -244,7 +243,6 @@ export default function Payment() {
                             ยืนยันการชำระเงิน
                         </Button>
                     </form>
-                    
                     <div className="flex flex-col items-center w-full md:w-1/2 mt-6 md:mt-0">
                         <h2 className="text-2xl font-semibold text-[#24685F]">QR CODE & PROMPT PAY</h2>
                         <Image
@@ -260,5 +258,13 @@ export default function Payment() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function Payment() {
+    return (
+        <Suspense fallback={<div>Loading payment details...</div>}>
+            <PaymentContent />
+        </Suspense>
     );
 }
